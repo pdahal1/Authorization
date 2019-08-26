@@ -35,6 +35,22 @@ router.post('/', (req, res) => {
   });
 });
 
+
+//following code will add the events tese items are hardcoaded but they can be fetched from 
+// the database too. 
+ router.get('/events', (req, res)=>{
+   let events = [
+    {"_id" : "3", 
+    "name" :  "auto expo"} ,
+
+    {"_id" : "4", 
+    "name" :  "auto expo"} 
+  ]
+  res.json.events
+   
+
+ }); 
+
 // router.post('/login', (req, res) => {
 //   let userData = req.body;
 
