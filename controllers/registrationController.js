@@ -45,6 +45,28 @@ router.post('/', (req, res) => {
 });
 
 
+// router.post('/login', (req, res) => {
+//   let userData = req.body;
+//   Registration.findOne({ email: userData.email }, (error, user) => {
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       if (!user) {
+//         res.status(401).send('invalid email')
+//       } else {
+//         userData.password= hash;
+//         bcrypt.compare(userData.password, hash, function(err, res){
+//           if (res){
+//             res.status(200).send(user)
+//           }else{
+//             res.status(401).send('invalid password');
+//           }
+//         })
+//       }
+//     }
+//   });
+// });
+
 router.post('/login', (req, res) => {
   let userData = req.body;
   Registration.findOne({ email: userData.email }, (error, user) => {
