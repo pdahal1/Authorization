@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
+const passport = require('passport-local');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
 
@@ -44,124 +45,47 @@ router.post('/', (req, res) => {
   });
 });
 
+router.post("/login", async (request, response) => {
+  try {
+      var user = await Registration.findOne({ email: request.body.email }).exec();
+      if(!user) {
+          return response.status(400).send({ message: "The username does not exist" });
+      }
+      if(!bcrypt.compareSync(request.body.password, user.password)) {
+          return response.status(400).send({ message: "The password is invalid" });
+      }
+      response.send({ message: "The username and password combination is correct!" });
+  } catch (error) {
+      response.status(500).send(error);
+  }
+});
 
 // router.post('/login', (req, res) => {
 //   let userData = req.body;
-//   Registration.findOne({ email: userData.email }, (error, user) => {
-//     if (error) {
-//       console.log(error);
+//   Registration.findOne({ email: userData.email }, (err, user) => {
+//     if (err) {
+//       console.log(err);
+//       return res.status(500).send
 //     } else {
 //       if (!user) {
-//         res.status(401).send('invalid email')
+//        return res.status(401).send('invalid email')
 //       } else {
-//         userData.password= hash;
-//         bcrypt.compare(userData.password, hash, function(err, res){
-//           if (res){
-//             res.status(200).send(user)
-//           }else{
-//             res.status(401).send('invalid password');
-//           }
-//         })
+        
+//         if (Registration.password !== bcrypt.compare(userData.password)) {
+//           res.status(401).send('invalid password');
+//         } else
+//           res.status(200).send(user);
 //       }
 //     }
 //   });
 // });
 
-router.post('/login', (req, res) => {
-  let userData = req.body;
-  Registration.findOne({ email: userData.email }, (error, user) => {
-    if (error) {
-      console.log(error);
-    } else {
-      if (!user) {
-        res.status(401).send('invalid email')
-      } else {
-        if (user.password !== userData.password) {
-          res.status(401).send('invalid password');
-        } else
-          res.status(200).send(user);
-      }
-    }
-  });
-});
-
-module.exports = router; 
-
-//following code will add the events tese items are hardcoaded but they can be fetched from 
-// the database too. 
-//  router.get('/events', (req, res)=>{
-//    let events = [
-//     {"_id" : "3", 
-//     "name" :  "auto expo"} ,
-
-//     {"_id" : "4", 
-//     "name" :  "auto expo"} 
-//   ]
-//   res.json.events
-
-
-//  });
-
-// router.get('/:id', (req, res) => {
-//   if (!ObjectId.isValid(req.params.id))
-//     return res
-//       .status(400)
-//       .send(`cannot retrieve the data with the id: ${req.params.id}`);
-
-//   User.findById(req.params.id, (err, doc) => {
-//     if (!err) {
-//       res.send(doc);
-//     } else {
-//       console.log(
-//         "error in getting the data wit the particular id that you are lookingor" +
-//           JSON.stringify(err, undefined, 2)
-//       );
-//     }
-//   });
-// });
+module.exports = router;
 
 
 
-// router.put('/:id', (req, res) => {
-//   if (!ObjectId.isValid(req.params.id))
-//     return res
-//       .status(400)
-//       .send(`could not find the id : ${req.params.id} to update`);
 
-//   var user = {
-//     _id: req.body._id,
-//     catagory: req.body.catagory,
-//     where: req.body.where,
-//     amount: req.body.amount
-//   };
 
-//   User.findByIdAndUpdate(
-//     req.params.id,
-//     { $set: user },
-//     { new: true },
-//     (err, doc) => {
-//       if (!err) {
-//         res.send(doc);
-//       } else {
-//         console.log(
-//           "error in updating the xpense" + JSON.stringify(err, undefined, 2)
-//         );
-//       }
-//     }
-//   );
-// });
 
-// router.delete('/:id', (req, res) => {
-//   if (!ObjectId.isValid(req.params.id))
-//     return res.status(400).send(`cannot delete the item with the id: ${req.params.id}`);
-
-//   User.findByIdAndRemove(req.params.id, (err, docs) => {
-//     if (!err) {
-//       res.send(docs);
-//     } else {
-//       console.log('error in deleting an entry' + JSON.stringify(err, undefined, 2));
-//     }
-//   });
-// });
 
 

@@ -1,6 +1,7 @@
 const express = require('express'); 
 const bodyParser = require('body-parser'); 
 const cors = require('cors');
+const passport = require('passport-local');
 const { mongoose } = require('./db.js');
 //var expenseController = require('./controllers/expenseController.js');
 var registrationController = require('./controllers/registrationController');
