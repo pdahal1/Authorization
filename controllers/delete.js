@@ -95,3 +95,26 @@
 //     res.status(500).send(err);
 //   }
 // });
+
+
+//follwing is the lazy login api no bcrypt.compare. 
+
+// router.post('/login', (req, res) => {
+//   let userData = req.body;
+//   Registration.findOne({ email: userData.email }, (err, user) => {
+//     if (err) {
+//       console.log(err);
+//       return res.status(500).send
+//     } else {
+//       if (!user) {
+//        return res.status(401).send('invalid email')
+//       } else {
+        
+//         if (Registration.password !== bcrypt.compare(userData.password)) {
+//           res.status(401).send('invalid password');
+//         } else
+//           res.status(200).send(user);
+//       }
+//     }
+//   });
+// });

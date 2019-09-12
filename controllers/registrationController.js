@@ -3,12 +3,14 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport-local');
 var router = express.Router();
 var ObjectId = require('mongoose').Types.ObjectId;
+const jwt = require('jsonwebtoken'); 
 
 var { Registration } = require('../models/registration');
 
 router.get('/', (req, res) => {
   Registration.find((err, doc) => {
     if (!err) {
+      `Error in Retrieving the employee` + JSON.stringify(err, undefined, 2)
       res.send(doc);
     } else {
       console.log(
@@ -17,6 +19,7 @@ router.get('/', (req, res) => {
     }
   });
 });
+
 
 
 router.post('/', (req, res) => {
@@ -35,50 +38,39 @@ router.post('/', (req, res) => {
       }
       reg.password = hash;
       reg.save((err, doc) => {
-        if (!err) {
-          res.send(doc);
-        } else {
+        if (err) {
           console.log('error in saving the user object' + JSON.stringify(err, undefined, 2));
+           
+        } else {
+          // let payload = {subject: reg._id}
+          // let token = jwt.sign(payload, 'secretKey')
+          res.status(200).send({Message: "you are registered"});
         }
       });
     });
   });
 });
 
-router.post("/login", async (request, response) => {
+router.post('/login', async (request, response) => {
   try {
-      var user = await Registration.findOne({ email: request.body.email }).exec();
+      var user = await Registration.findOne( {email: request.body.email }).exec();
       if(!user) {
-          return response.status(400).send({ message: "The username does not exist" });
+          return response.status(400).send({message: "The username does not exist" });
       }
       if(!bcrypt.compareSync(request.body.password, user.password)) {
-          return response.status(400).send({ message: "The password is invalid" });
-      }
-      response.send({ message: "The username and password combination is correct!" });
+          return response.status(400).send( {message:"The password is invalid" } );
+      }else{
+      let payload = {subject: user._id}
+      let token = jwt.sign(payload, 'secretkey')
+      response.status(200).send({token}) };
   } catch (error) {
       response.status(500).send(error);
   }
 });
 
-// router.post('/login', (req, res) => {
-//   let userData = req.body;
-//   Registration.findOne({ email: userData.email }, (err, user) => {
-//     if (err) {
-//       console.log(err);
-//       return res.status(500).send
-//     } else {
-//       if (!user) {
-//        return res.status(401).send('invalid email')
-//       } else {
-        
-//         if (Registration.password !== bcrypt.compare(userData.password)) {
-//           res.status(401).send('invalid password');
-//         } else
-//           res.status(200).send(user);
-//       }
-//     }
-//   });
-// });
+
+
+
 
 module.exports = router;
 
