@@ -6,6 +6,7 @@ const { mongoose } = require('./db.js');
 //var expenseController = require('./controllers/expenseController.js');
 var registrationController = require('./controllers/registrationController');
 var userController = require('./controllers/userController.js');
+var entryController = require('./controllers/entryController')
 
 var app = express(); 
 app.use(bodyParser.json());
@@ -14,4 +15,4 @@ app.listen(3000, () => console.log('app fired up at port 3000 ok'));
 //app.use('/expenses', expenseController);
 app.use('/users', userController);
 app.use('/register', registrationController ); 
- 
+ app.use('/entries', entryController); 
