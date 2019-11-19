@@ -332,3 +332,21 @@
 //         response.status(500).send(error);
 //     }
 //   });
+
+// router.get('/:id', (req, res) => {
+//     if (!ObjectId.isValid(req.params.id))
+//       return res
+//         .status(400)
+//         .send(`cannot retrieve the data with the id: ${req.params.id}`);
+  
+//     Expense.findById(req.params.id, (err, doc) => {
+//       if (!err) {
+//         res.send(doc);
+//       } else {
+//         console.log(
+//           "error in getting the data wit the particular id that you are lookingor" +
+//             JSON.stringify(err, undefined, 2)
+//         );
+//       }
+//     });
+//   });

@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     var user = new User({
          _id: req.body._id,
-        email: req.body.email, 
+        //email: req.body.email, 
         password: req.body.password
         
 

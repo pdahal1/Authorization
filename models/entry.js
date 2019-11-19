@@ -3,7 +3,7 @@ var Entries = mongoose.model('entries', {
     heading: {type: String},
     details: {type:String},
     phone: {type:String},
-    email: {type: String}
+    //email: {type: String}
   
 
 });

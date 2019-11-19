@@ -37,20 +37,22 @@ router.get("/", (req, res) => {
   });
 });
 
+
+
 router.post("/", (req, res) => {
   var reg = new Registration({
-    // _id: req.body._id,
+     _id: req.body._id,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     phone: req.body.phone,
-    email: req.body.email,
+    //email: req.body.cd auth ,
     password: req.body.password
   });
 
   bcrypt.genSalt(10, function(err, salt) {
     bcrypt.hash(reg.password, salt, function(err, hash) {
       if (err) {
-        console.log(err);
+        console.log(err); 
       }
       reg.password = hash;
       reg.save((err, doc) => {
@@ -71,7 +73,7 @@ router.post("/", (req, res) => {
 
 router.post("/login", async (request, response) => {
   try {
-    var user = await Registration.findOne({ email: request.body.email }).exec();
+    var user = await Registration.findOne({ _id: request.body._id }).exec();
     if (!user) {
       return response
         .status(400)
@@ -90,10 +92,10 @@ router.post("/login", async (request, response) => {
 });
 
 router.get("/:id", (req, res) => {
-  if (!ObjectId.isValid(req.params.id))
-    return res
-      .status(400)
-      .send(`cannot retrieve the data with the id: ${req.params.id}`);
+  // if (!ObjectId.isValid(req.params.id))
+  //   return res
+  //     .status(400)
+  //     .send(`cannot retrieve the data with the id: ${req.params.id}`);
 
   Registration.findById(req.params.id, (err, doc) => {
     if (!err) {
@@ -106,6 +108,8 @@ router.get("/:id", (req, res) => {
     }
   });
 });
+
+
 
 router.post("/account", async (request, response) => {
       try {
@@ -122,5 +126,30 @@ router.post("/account", async (request, response) => {
           response.status(500).send(error);
       }
     });
+
+// router.get("/account", async (request, response) => {
+//   try {
+//       var user = await Registration.findOne( {email: request.body.email })
+//       if(!user) {
+//           return response.status(400).send({message: "The username does not exist" });
+//       }
+//       if(!bcrypt.compare(request.body.password, user.password)) {
+//           return response.status(400).send( {message:"The password is invalid" } );
+//       }else{
+//            // response.status(200).send({message:"good"}) };
+//             // response.status(200).send(user) 
+//           Registration.findOne(request.params.email, (err, doc)=>{
+//             if(!err){
+//               res.send(doc); 
+//             }else{
+//               console.log("error" + JSON.stringify(err, undefined, 2)); 
+//             }
+//           }); 
+          
+//           };
+//   } catch (error) {
+//       response.status(500).send(error);
+//   }
+// });
 
 module.exports = router;
